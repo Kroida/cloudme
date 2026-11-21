@@ -5,6 +5,8 @@ function init() {
   const container = document.querySelector("#dos");
   const startButton = document.querySelector("#start-arena");
 
+  let ci = null;
+
   if (!status || !container || !startButton) {
     throw new Error("Elementos da aplicação não encontrados.");
   }
@@ -26,9 +28,10 @@ function init() {
         autoStart: true,
         renderAspect: "4/3",
 
-        onEvent: (event) => {
+        onEvent: (event, commandInterface) => {
           if (event === "ci-ready") {
-            status.textContent = "Emulador pronto! Iniciando Arena...";
+            ci = commandInterface;
+            status.textContent = "Emulador pronto!";
           }
         },
       });
@@ -37,6 +40,30 @@ function init() {
       console.error(error);
       startButton.disabled = false;
     }
+  });
+
+  function handleKeyboard(event) {
+    if (!ci || event.code !== "KeyW") {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    if (event.type === "keydown" && event.repeat) {
+      return;
+    }
+
+    const pressed = event.type === "keydown";
+
+    ci.sendKeyEvent(265, pressed);
+  }
+
+  window.addEventListener("keydown", handleKeyboard, true);
+  window.addEventListener("keyup", handleKeyboard, true);
+
+  window.addEventListener("blur", () => {
+    ci?.sendKeyEvent(265, false);
   });
 }
 
