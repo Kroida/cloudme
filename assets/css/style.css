@@ -18,3 +18,11 @@ body {
 main {
     padding: 2rem;
 }
+
+#dos {
+    width: 100%;
+    height: min(65vh, 650px);
+    min-height: 320px;
+    background: #000;
+    border: 2px solid #6f5c36;
+}
