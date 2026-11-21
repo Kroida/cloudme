@@ -16,7 +16,9 @@ body {
 }
 
 main {
+    width: min(100%, 960px);
     padding: 2rem;
+    box-sizing: border-box;
 }
 
 #dos {
