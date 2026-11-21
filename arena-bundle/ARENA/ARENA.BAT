@@ -1,0 +1,3 @@
+@SET ARENADATA=D:
+@C:
+@ACD -Ssbpdig.adv -IOS220 -IRQS7 -DMAS1 -Mgenmidi.adv -IOM330 -IRQM2 -DMAM1
