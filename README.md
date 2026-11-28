@@ -1,29 +1,96 @@
-# Cloudme — teste DOSBox-X inspirado no Heyming
+# Cloudme — Arena Web
 
-Versão experimental baseada no ZIP original `arena_web.zip`, não na migração Em-DOSBox. Mantém o HTML/CSS/JS puro e o bundle pessoal intacto. Não requer WSL, Emscripten, npm nem compilação.
+Aplicação web pessoal para executar **The Elder Scrolls: Arena** no navegador, com controles personalizados e uma futura integração de salvamentos locais e sincronização pelo Google Drive.
 
-## Executar
+**Estado do projeto:** primeira versão jogável (Fase 2 — Emulação e integração). Execução no Chrome confirmada pelo usuário. Persistência entre sessões e publicação funcional ainda não validadas.
 
-1. Extraia o ZIP completo em uma pasta nova, mantendo o projeto anterior como backup.
-2. Abra o PowerShell na pasta que contém `index.html`.
-3. Execute `py -m http.server 5500` (se a porta estiver ocupada, pare o servidor anterior com Ctrl+C).
-4. Abra `http://localhost:5500/` e aguarde o Service Worker aplicar o isolamento. Pode haver uma recarga automática.
-5. Clique em Iniciar TES: Arena. O padrão é DOSBox-X + Canvas 2D, captura do mouse desativada. Para comparar WebGL ou captura ativa, recarregue a página e altere a opção antes de iniciar.
+## Tecnologias
 
-A página informa o runtime efetivamente carregado, a versão retornada pelo player, o renderer e se o isolamento está ativo. O loader tenta a distribuição fixa 8.5.3 (endereço baseado no padrão oficial), com fallback explícito para a CDN `/latest/` caso falhe. Para testar diretamente a CDN atual: `http://localhost:5500/?runtime=latest`.
+| Tecnologia | Responsabilidade |
+| --- | --- |
+| HTML, CSS e JavaScript | Interface e integração |
+| js-dos v8 + DOSBox-X | Emulação DOS via WebAssembly |
+| Service Worker | Isolamento entre origens (COOP/COEP) |
+| IndexedDB | Integração preliminar de alterações do sistema de arquivos |
+| Git e GitHub | Versionamento |
+| GitHub Pages | Hospedagem estática planejada |
+| Google OAuth e Drive API | Autenticação e sincronização planejadas |
 
-## Controles e persistência
+Sem backend próprio, banco de dados servidor, npm ou compilação local do emulador. A experiência com Em-DOSBox foi descontinuada.
 
-Mantidos os controles do `app.js` original, incluindo Backspace → Escape e Ctrl esquerdo para digitar. A tecla Esc física ainda está sujeita às regras de captura do navegador.
+## Executar localmente
 
-Para testar persistência, salve dentro do Arena e depois utilize o atalho F6 do player js-dos. A persistência após recarregar a página ainda precisa ser validada na Fase 3. Os hooks documentados `fsChanges` usam IndexedDB para guardar alterações. A biblioteca também tem persistência local própria, isolada sob `cloudme-heyming-test`. Isso não é sincronização na nuvem nem garantia de salvamento automático. O teste usa uma chave nova para não misturar os saves de testes anteriores; os saves já presentes no bundle foram mantidos. Não limpe dados do site sem backup.
+Requisitos: Python 3, navegador com suporte a WebAssembly e Service Worker, acesso à CDN do js-dos e uma cópia pessoal compatível do bundle em `private-game/arena.jsdos`.
 
-## GitHub Pages
+Na raiz do projeto, pelo PowerShell:
 
-O Service Worker tem escopo relativo ao diretório do projeto, usa COOP/COEP e não guarda arquivos em cache. Recursos externos precisam permitir CORS/CORP. Em caso de falha, consulte Console e Network. O bundle `private-game/arena.jsdos` e `arena-bundle/` permanecem ignorados no Git. Antes do deploy público, implementar carregamento privado autorizado; caso contrário a aplicação publicada não encontrará o jogo. Não publique arquivos pessoais ou proprietários.
+```powershell
+py -m http.server 5500
+```
 
-## Escopo e validação
+Abra <http://localhost:5500/>. Aguarde a preparação do isolamento (pode ocorrer uma recarga automática), escolha a renderização e a captura do mouse e clique em **Iniciar TES: Arena**.
 
-Referências: https://joeheyming.github.io/dos/ ; https://js-dos.com/player-api.html ; https://js-dos.com/save-load-game-progress.html ; https://github.com/gzuidhof/coi-serviceworker (conceito de isolamento em hospedagem estática).
+A configuração inicial é DOSBox-X, Canvas 2D, proporção 4:3 e captura do mouse desmarcada. Para alterar as opções após iniciar, recarregue a página. O botão **Tela cheia** fica disponível quando o emulador estiver pronto.
 
-Não foi possível obter os arquivos-fonte internos do Heyming. Esta é uma implementação própria baseada na arquitetura descrita no site. Não é uma cópia literal. Canvas 2D e captura desativada são escolhas de teste, não configurações confirmadas do Heyming. Não alteramos `dosbox.conf` nem o bundle, para reduzir variáveis. O endereço fixo da CDN não pôde ser verificado nesta sessão; a execução real não foi validada. O teste de navegador local neste ambiente foi bloqueado por política do Chromium. A versão é experimental e não conclui as etapas 8–11.
+Para encerrar o servidor, pressione `Ctrl+C` no terminal.
+
+## Estrutura
+
+```text
+arena_web/
+├── assets/
+│   ├── css/style.css
+│   └── js/app.js
+├── docs/FASE-2.md
+├── arena-bundle/           # preparação local do jogo; ignorada
+├── private-game/
+│   └── arena.jsdos         # cópia pessoal; ignorada
+├── coi-sw.js
+├── index.html
+├── .gitignore
+├── .nojekyll
+└── README.md
+```
+
+## Controles
+
+| Tecla | Ação configurada |
+| --- | --- |
+| W / S | Avançar / recuar |
+| A / D | Deslocamento lateral |
+| Q / E | Girar à esquerda / direita |
+| F / G | Sacar/guardar arma / usar item |
+| R / T | Descansar / status |
+| C / 2 | Lançar / repetir magia |
+| Z / X | Furtar / soltar item |
+| V / Espaço | Pulo vertical / longo |
+| J / M / O | Diário / mapa local / mapa mundial |
+| Tab | Ficha do personagem |
+| Backspace | Envia Esc ao jogo |
+| Ctrl esquerdo (segurar) | Digitação normal; Backspace apaga caracteres |
+
+Os atalhos F1, F2, F3, F4 e F8 permanecem mapeados aos códigos originais. F6 e F7 não são interceptados pelo remapeamento personalizado e ficam sob responsabilidade do player. O Esc físico pode liberar a captura do mouse ou sair da tela cheia por regras de segurança do navegador.
+
+## Salvamentos
+
+Salve primeiro dentro do Arena. A interface mantém os atalhos de salvamento do js-dos; o botão redundante “Salvar no navegador” foi removido. Embora o código já tenha callbacks `fsChanges` e armazenamento IndexedDB, a recuperação dos saves após recarregar ainda não foi confirmada. Não confie nesta versão como único backup de uma partida e não limpe os dados do site sem uma cópia segura.
+
+## Publicação e privacidade
+
+O projeto é estático e foi pensado para GitHub Pages. O bundle e a pasta de preparação não devem ser publicados. O carregamento autorizado dos arquivos privados e a sincronização com Google Drive serão tratados posteriormente. O `.gitignore` protege novos arquivos não rastreados, mas não elimina conteúdo de commits anteriores: revise o histórico antes de publicar ou enviar alterações a um repositório remoto.
+
+## Roadmap
+
+1. Arquitetura e configuração do ambiente.
+2. Emulação e integração do jogo — versão jogável; documentação e versionamento em fechamento.
+3. Persistência e salvamentos locais.
+4. Autenticação e sincronização na nuvem.
+5. Interface, testes e publicação.
+
+## Documentação
+
+- [Fase 2 — Emulação e integração](docs/FASE-2.md)
+- [js-dos — Player API](https://js-dos.com/player-api.html)
+- [js-dos — Save/Load](https://js-dos.com/save-load-game-progress.html)
+- [Heyming DOS Player — referência arquitetural](https://joeheyming.github.io/dos/)
+- [COI Service Worker — referência conceitual](https://github.com/gzuidhof/coi-serviceworker)
