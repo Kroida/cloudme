@@ -1,22 +1,27 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Arena Web</title>
     <link rel="stylesheet" href="./assets/css/style.css" />
     <script type="module" src="./assets/js/app.js"></script>
-    <link rel="stylesheet" href="https://v8.js-dos.com/latest/js-dos.css" />
-    <script src="https://v8.js-dos.com/latest/js-dos.js"></script>
   </head>
   <body>
     <main>
       <h1>Arena Web</h1>
       <p>The Elder Scrolls: Arena no navegador.</p>
-      <p id="app-status">Inicializando...</p>
-      
-      <button id="start-arena" type="button">Iniciar TES: Arena</button>
+      <p id="app-status" role="status">Inicializando...</p>
+      <div class="controls">
+        <label>Renderização <select id="renderer"><option value="canvas">Canvas 2D</option><option value="webgl">WebGL</option></select></label>
+        <label><input type="checkbox" id="capture" /> Capturar mouse</label>
+        <button id="start-arena" type="button" disabled>Iniciar TES: Arena</button>
+        <button id="save-arena" type="button" disabled>Salvar no navegador</button>
+        <button id="fullscreen-arena" type="button" disabled>Tela cheia</button>
+      </div>
       <div id="dos"></div>
+      <p id="diagnostics" class="diagnostics" aria-live="polite"></p>
+      <p class="diagnostics">Backspace envia Esc ao jogo. Ctrl esquerdo ativa a digitação normal.</p>
     </main>
   </body>
 </html>

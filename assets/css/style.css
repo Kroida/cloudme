@@ -28,3 +28,14 @@ main {
     background: #000;
     border: 2px solid #6f5c36;
 }
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+.controls button, .controls select { padding: .45rem .65rem; }
+.diagnostics { font: .8rem/1.5 system-ui, sans-serif; overflow-wrap: anywhere; }
