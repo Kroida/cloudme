@@ -90,3 +90,37 @@ main {
 #dos:has(.jsdos-fullscreen-workaround) :is(.sidebar, .sidebar-thin, .sidebar-slider) {
     display: none !important;
 }
+
+/* Remove a moldura em tela cheia. */
+#dos:fullscreen,
+#dos:has(:fullscreen),
+#dos:has(.jsdos-fullscreen-workaround) {
+    border: 0 !important;
+    background: #000 !important;
+}
+
+/* Oculta os controles laterais em tela cheia. */
+#dos:is(:fullscreen, :has(:fullscreen), :has(.jsdos-fullscreen-workaround))
+:is(.sidebar, .sidebar-thin, .sidebar-slider) {
+    display: none !important;
+}
+
+/* Remove o espaçador lateral criado pelo js-dos. */
+#dos:is(:fullscreen, :has(:fullscreen), :has(.jsdos-fullscreen-workaround))
+.window > .flex.flex-row > .flex-shrink-0:first-child:empty {
+    display: none !important;
+    width: 0 !important;
+}
+
+/* Uniformiza o fundo da área de emulação. */
+#dos:is(:fullscreen, :has(:fullscreen), :has(.jsdos-fullscreen-workaround))
+.window {
+    background: #000 !important;
+}
+
+/* Elimina o deslocamento do fundo interno. */
+#dos:is(:fullscreen, :has(:fullscreen), :has(.jsdos-fullscreen-workaround))
+.window > .background-image {
+    left: 0 !important;
+    display: none !important;
+}

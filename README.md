@@ -16,7 +16,7 @@ A página informa o runtime efetivamente carregado, a versão retornada pelo pla
 
 Mantidos os controles do `app.js` original, incluindo Backspace → Escape e Ctrl esquerdo para digitar. A tecla Esc física ainda está sujeita às regras de captura do navegador.
 
-Para testar persistência, salve dentro do Arena e depois clique em **Salvar no navegador**. Os hooks documentados `fsChanges` usam IndexedDB para guardar alterações. A biblioteca também tem persistência local própria, isolada sob `cloudme-heyming-test`. Isso não é sincronização na nuvem nem garantia de salvamento automático. O teste usa uma chave nova para não misturar os saves de testes anteriores; os saves já presentes no bundle foram mantidos. Não limpe dados do site sem backup.
+Para testar persistência, salve dentro do Arena e depois utilize o atalho F6 do player js-dos. A persistência após recarregar a página ainda precisa ser validada na Fase 3. Os hooks documentados `fsChanges` usam IndexedDB para guardar alterações. A biblioteca também tem persistência local própria, isolada sob `cloudme-heyming-test`. Isso não é sincronização na nuvem nem garantia de salvamento automático. O teste usa uma chave nova para não misturar os saves de testes anteriores; os saves já presentes no bundle foram mantidos. Não limpe dados do site sem backup.
 
 ## GitHub Pages
 

@@ -115,7 +115,6 @@ async function init() {
   const startButton = document.querySelector("#start-arena");
   const renderer = document.querySelector("#renderer");
   const capture = document.querySelector("#capture");
-  const saveButton = document.querySelector("#save-arena");
   const fullscreenButton = document.querySelector("#fullscreen-arena");
   const diagnostics = document.querySelector("#diagnostics");
   let player = null;
@@ -400,7 +399,6 @@ async function init() {
             ci = commandInterface;
             clearTimeout(loadingTimer);
             status.textContent = "DOSBox-X iniciado.";
-            saveButton.disabled = false;
             fullscreenButton.disabled = false;
             updateDiagnostics();
           }
@@ -418,21 +416,6 @@ async function init() {
       renderer.disabled = false;
       capture.disabled = false;
       startButton.disabled = false;
-    }
-  });
-
-  // Persiste as alterações depois de salvar dentro do jogo.
-  saveButton.addEventListener("click", async () => {
-    if (!player) return;
-    saveButton.disabled = true;
-    try {
-      const saved = await player.save();
-      status.textContent = saved ? "Alterações salvas no navegador." : "Nenhuma confirmação de salvamento; confira o player.";
-    } catch (error) {
-      status.textContent = `Erro ao salvar: ${error.message}`;
-      console.error(error);
-    } finally {
-      saveButton.disabled = false;
     }
   });
 
