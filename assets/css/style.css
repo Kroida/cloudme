@@ -39,3 +39,54 @@ main {
 }
 .controls button, .controls select { padding: .45rem .65rem; }
 .diagnostics { font: .8rem/1.5 system-ui, sans-serif; overflow-wrap: anywhere; }
+
+/* Organiza os atalhos F6/F7 sem alterar os eventos do player. */
+#dos .save-buttons {
+    margin: 0;
+    gap: 4px;
+}
+
+#dos .save-buttons > .sidebar-button {
+    flex-shrink: 0;
+    margin: 2px 0;
+}
+
+#dos .save-buttons > .sidebar-button:not(.save-button) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+#dos .save-buttons > .sidebar-button:not(.save-button) > svg {
+    position: static;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+
+#dos .save-buttons > .sidebar-button:not(.save-button) > p {
+    position: static;
+    margin: 0;
+    font: 600 10px/1 system-ui, sans-serif;
+}
+
+/* Remove a moldura do Cloudme durante a tela cheia. */
+#dos:fullscreen,
+#dos:has(:fullscreen),
+:fullscreen #dos,
+#dos.jsdos-fullscreen-workaround,
+#dos:has(.jsdos-fullscreen-workaround) {
+    border: 0 !important;
+}
+
+/* Oculta somente a interface lateral em tela cheia, sem liberar o mouse. */
+#dos:fullscreen :is(.sidebar, .sidebar-thin, .sidebar-slider),
+#dos:has(:fullscreen) :is(.sidebar, .sidebar-thin, .sidebar-slider),
+:fullscreen #dos :is(.sidebar, .sidebar-thin, .sidebar-slider),
+#dos.jsdos-fullscreen-workaround :is(.sidebar, .sidebar-thin, .sidebar-slider),
+#dos:has(.jsdos-fullscreen-workaround) :is(.sidebar, .sidebar-thin, .sidebar-slider) {
+    display: none !important;
+}
